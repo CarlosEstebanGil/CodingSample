@@ -1,0 +1,93 @@
+#Maven Version
+
+	FROM maven:3.8.5-jdk-11
+	
+	#new:commented
+	WORKDIR /app
+	
+	COPY pom.xml .
+	
+	RUN mvn dependency:resolve
+	
+	
+	 
+	#COPY src ./src
+	 
+	#COPY .src /src
+
+	#COPY src ./src
+	
+	#COPY c:/Users/carlo/Documents/2023\ pruebas\ java\ tmp\ aisladas/JSE8plusAllBasicTechsCodingSample/src /app/src/
+	#COPY c:/Users/carlo/Documents/2023 pruebas java tmp aisladas/JSE8plusAllBasicTechsCodingSample/src /app/src/
+	#COPY /mnt/c/Users/carlo/Documents/2023\ pruebas\ java\ tmp\ aisladas/JSE8plusAllBasicTechsCodingSample/src /app/src/
+	#COPY ./JSE8plusAllBasicTechsCodingSample/src /app/src
+	#COPY JSE8plusAllBasicTechsCodingSample /app
+	
+	# Copy the pom.xml and resolve dependencies
+	COPY JSE8plusAllBasicTechsCodingSample/pom.xml ./pom.xml
+	RUN mvn dependency:go-offline -B
+	# Copy the source code
+	COPY JSE8plusAllBasicTechsCodingSample/src ./src
+
+
+	RUN mvn package
+	
+	#new:added	
+	#new modified
+	#COPY target/my-app-0.0.1-SNAPSHOT.jar app.jar
+	#commented again
+	#COPY target/JSE8plusAllBasicTechsCodingSample-0.0.1-SNAPSHOT.jar app.jar 
+	#new:added
+	#commented
+	#CMD java -jar app.jar
+	
+	#new:commented
+	#CMD java -jar target/my-app-0.0.1-SNAPSHOT.jar
+	#new: uncommented and modified
+	CMD java -jar target/JSE8plusAllBasicTechsCodingSample-0.0.1-SNAPSHOT.jar 
+	# ( este comando no tirar error al construir la imagen pero cuando quiero correrla desde docker desktop me tira el sig error:
+	# 2023-09-02 23:27:12 Error: Could not find or load main class com.charly.j8PlusTechs.JSE8PlusBasicCodingSampleByCharlySan
+	# 2023-09-02 23:27:12 Caused by: java.lang.ClassNotFoundException: com.charly.j8PlusTechs.JSE8PlusBasicCodingSampleByCharlySan
+	
+	#pruevas q intentaron reemplazar al commando de arriba pero que fallan ya como paso 7 en la construccion de la imagen desde cmd
+#	#RUN src/com/charly/j8PlusTechs/JSE8PlusBasicCodingSampleByCharlySan.java
+#		#RUN javac src/main/java/com/charly/j8PlusTechs/JSE8PlusBasicCodingSampleByCharlySan.java
+#		RUN javac src/java/com/charly/j8PlusTechs/JSE8PlusBasicCodingSampleByCharlySan.java
+#		#CMD java -classpath src/java com.charly.j8PlusTechs.JSE8PlusBasicCodingSampleByCharlySan
+#		#CMD java -classpath src/main/java com.charly.j8PlusTechs.JSE8PlusBasicCodingSampleByCharlySan
+#		CMD java -classpath src/java com.charly.j8PlusTechs.JSE8PlusBasicCodingSampleByCharlySan
+
+#Old: single proj version ( no maven ) 
+
+	# Use a base image with Java already installed
+	# FROM openjdk
+	
+	# Set the working directory to /app
+	# WORKDIR /app
+	
+	# Copy the HelloWorld.java file into the container
+	# COPY JSE8PlusBasicCodingSampleByCharlySan.java .
+	
+	# Create a directory for compiled classes
+	# RUN mkdir -p bin/com/charly/j8PlusTechs
+	
+	# Compile HelloWorld.java and place the compiled classes in the 'bin' directory
+	# RUN javac -d bin JSE8PlusBasicCodingSampleByCharlySan.java
+	
+	# Set the working directory to 'bin'
+	# WORKDIR bin
+	
+	# Specify the command to run when the container starts
+	# CMD ["java", "-classpath", "/app/bin", "com.charly.j8PlusTechs.JSE8PlusBasicCodingSampleByCharlySan"]
+
+
+
+# --------------------- 
+
+# FROM openjdk
+# COPY HelloWorld.java HelloWorldProject/
+# WORKDIR HelloWorldProject
+# RUN mkdir -p bin
+# RUN javac -d bin ./HelloWorld.java
+# WORKDIR bin
+# CMD ["java","HelloWorld"]

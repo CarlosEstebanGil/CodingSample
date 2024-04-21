@@ -1,0 +1,154 @@
+my pc with windows 10 and eclipse java maven project that contains 1 class with a main has the following structure:
+
+root of the project: 
+
+	\src\main\java\com\charly\j8PlusTechs\
+
+	and inside that package two files:  
+
+	JSE8PlusBasicCodingSampleByCharlySan.java 
+	DockerFile 
+
+( the java class has a main method )
+
+the pom has the following content: 
+
+FROM maven:3.8.5-jdk-11
+	
+	WORKDIR /app
+	
+	COPY pom.xml .
+	
+	RUN mvn dependency:resolve
+	
+	COPY src ./src
+	
+	RUN mvn package
+	
+	CMD java -jar target/my-app-0.0.1-SNAPSHOT.jar
+
+So.. when i try to create the docker  ( docker desktop is started ) i do this:
+
+	- open a cmd as administrator 
+	- enter my phisical folder: cd c:/Users/carlo/Documents/2023 pruebas java tmp aisladas/JSE8plusAllBasicTechsCodingSample/src/main/java/com/charly/j8PlusTechs/
+	 ( i have my java file and the DockerFile in that package/folder ) 
+	- and then i enter the next command to build a docker of my maven project:
+	docker build -t my-app .
+
+	but the following error occurs:  
+
+	[+] Building 0.4s (2/2) FINISHED                                                                                                                                                     docker:default
+	 => [internal] load .dockerignore                                                                                                                                                              0.2s
+	 => => transferring context: 2B                                                                                                                                                                0.1s 
+	 => [internal] load build definition from Dockerfile                                                                                                                                           0.2s 
+	 => => transferring dockerfile: 2B                                                                                                                                                             0.0s
+
+ERROR: failed to solve: failed to read dockerfile: open /var/lib/docker/tmp/buildkit-mount811067509/Dockerfile: no such file or directory
+
+---
+
+this is my project folders structure
+
+09/02/2023  03:07 PM    <DIR>          .
+09/02/2023  03:07 PM    <DIR>          ..
+09/01/2023  07:00 PM             1,608 .classpath
+09/01/2023  04:42 PM                 9 .gitignore
+09/01/2023  04:41 PM               585 .project
+09/01/2023  04:41 PM    <DIR>          .settings
+09/02/2023  03:07 PM                 0 dir.txt
+09/01/2023  07:01 PM             3,052 pom.xml
+09/01/2023  04:41 PM    <DIR>          src
+09/01/2023  04:41 PM    <DIR>          target
+
+	inside the package \src\main\java\com\charly\j8PlusTechs\ i have 2 files:
+
+	1. JSE8PlusBasicCodingSampleByCharlySan.java  ( this java class has a main method )
+	2. Dockerfile 
+
+the Dockerfile file has the following content: 
+
+FROM maven:3.8.5-jdk-11
+	
+	WORKDIR /app
+	
+	COPY pom.xml .
+	
+	RUN mvn dependency:resolve
+	
+	COPY src ./src
+	
+	RUN mvn package
+	
+	CMD java -jar target/my-app-0.0.1-SNAPSHOT.jar
+
+so, i open a cmd as administrator, i go to the folder: 
+
+and then inside the package \src\main\java\com\charly\j8PlusTechs\ folder , in cmd terminal,i enter next command :
+
+docker build -t my-app . --no-cache
+
+but the following error ocurrs: 
+
+[+] Building 4.7s (9/10)                                                                                                                                   docker:default
+ => [internal] load build definition from Dockerfile                                                                                                                 0.1s
+ => => transferring dockerfile: 1.21kB                                                                                                                               0.0s
+ => [internal] load .dockerignore                                                                                                                                    0.1s
+ => => transferring context: 2B                                                                                                                                      0.0s
+ => [internal] load metadata for docker.io/library/maven:3.8.5-jdk-11                                                                                                4.0s
+ => CANCELED [1/6] FROM docker.io/library/maven:3.8.5-jdk-11@sha256:4e4b4e0a8bc2d07f5fef86d2b55b19fa0e8c8aa54540b34be27c711904a8014d                                 0.3s
+ => => resolve docker.io/library/maven:3.8.5-jdk-11@sha256:4e4b4e0a8bc2d07f5fef86d2b55b19fa0e8c8aa54540b34be27c711904a8014d                                          0.1s
+ => => sha256:4e4b4e0a8bc2d07f5fef86d2b55b19fa0e8c8aa54540b34be27c711904a8014d 549B / 549B                                                                           0.0s
+ => => sha256:40b4fae7150205905b6351dafd7f703274ccdd85bdc0b91e55a4d74f6fd25d0f 2.42kB / 2.42kB                                                                       0.0s
+ => => sha256:96e051c6625659f5b59794b0568bde073f279557e9469404a0ef2dd9ba28f673 8.92kB / 8.92kB                                                                       0.0s
+ => [internal] load build context                                                                                                                                    0.0s
+ => => transferring context: 2B                                                                                                                                      0.0s
+ => CACHED [2/6] WORKDIR /app                                                                                                                                        0.0s
+ => ERROR [3/6] COPY pom.xml .                                                                                                                                       0.0s
+ => CACHED [4/6] RUN mvn dependency:resolve                                                                                                                          0.0s
+ => ERROR [5/6] COPY src ./src                                                                                                                                       0.0s
+------
+ > [3/6] COPY pom.xml .:
+------
+------
+ > [5/6] COPY src ./src:
+------
+Dockerfile:11
+--------------------
+   9 |          RUN mvn dependency:resolve
+  10 |
+  11 | >>>      COPY src ./src
+  12 |
+  13 |          RUN mvn package
+--------------------
+ERROR: failed to solve: failed to compute cache key: failed to calculate checksum of ref 18031e63-e08c-4752-86d2-1be5e0b20f49::jwrnutu611peg7nap6cauk7hv: "/src": not found
+
+
+Listo, tuve que hacer un par de cosas, tal vez redundantes, pero funcionó:
+
+cambié mi Dockerfile por esto:
+
+	FROM maven:3.8.5-jdk-11
+	
+	#WORKDIR /app		quité esto x mi cuenta creo que sobraba o afectaba 
+	
+	COPY pom.xml .
+	
+	RUN mvn dependency:resolve
+	
+	#COPY src ./src
+	COPY .src /src
+	
+	RUN mvn package
+	
+	CMD java -jar target/my-app-0.0.1-SNAPSHOT.jar
+
+dentro de mi package copié ahi con el Dockerfile y el .java el pom.xml 
+dentro de mi package creé una carpeta src y dento metí el pom.xml tmb   (ya sé está en raiz,j8.. y j8../src repe)
+
+abrí un cmd as administrator y puse cd al dir donde está el .java el Dockerfile y ahora tmb el pom.xml 
+
+puse esto:
+
+c:\Users\carlo\Documents\2023 pruebas java tmp aisladas\JSE8plusAllBasicTechsCodingSample\src\main\java\com\charly\j8PlusTechs>docker build -t my-app . --no-cache
+
+Y FUNCIONó !!!!!!!!!!!!!!!!!!!!!!! 

@@ -1,0 +1,17 @@
+ Volume in drive C is Windows-SSD
+ Volume Serial Number is 14D3-241A
+
+ Directory of c:\Users\carlo\Documents\2023 pruebas java tmp aisladas\JSE8plusAllBasicTechsCodingSample
+
+09/02/2023  03:07 PM    <DIR>          .
+09/02/2023  03:07 PM    <DIR>          ..
+09/01/2023  07:00 PM             1,608 .classpath
+09/01/2023  04:42 PM                 9 .gitignore
+09/01/2023  04:41 PM               585 .project
+09/01/2023  04:41 PM    <DIR>          .settings
+09/02/2023  03:07 PM                 0 dir.txt
+09/01/2023  07:01 PM             3,052 pom.xml
+09/01/2023  04:41 PM    <DIR>          src
+09/01/2023  04:41 PM    <DIR>          target
+               5 File(s)          5,254 bytes
+               5 Dir(s)  36,672,139,264 bytes free
